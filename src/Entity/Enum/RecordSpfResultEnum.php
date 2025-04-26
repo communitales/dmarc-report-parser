@@ -9,13 +9,16 @@
 
 namespace App\Entity\Enum;
 
+/**
+ * @see https://dmarc.org/dmarc-xml/0.1/rua.xsd
+ */
 enum RecordSpfResultEnum: string
 {
     case None = 'none';
     case Pass = 'pass';
     case Fail = 'fail';
+    case Softfail = 'softfail';
     case Neutral = 'neutral';
-    case Policy = 'policy';
     case TempError = 'temperror';
     case PermError = 'permerror';
     case Unknown = 'unknown';

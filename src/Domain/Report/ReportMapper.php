@@ -21,6 +21,7 @@ use DateTime;
 use SimpleXMLElement;
 
 use function implode;
+use function mktime;
 use function simplexml_load_string;
 use function unpack;
 
@@ -41,8 +42,19 @@ class ReportMapper
 
         $reportId = (string)$xml->{'report_metadata'}->{'report_id'};
 
-        $minDate = (new Datetime())->setTimestamp((int)$xml->{'report_metadata'}->{'date_range'}->{'begin'});
-        $maxDate = (new Datetime())->setTimestamp((int)$xml->{'report_metadata'}->{'date_range'}->{'end'});
+        $dateRangeBegin = (int)$xml->{'report_metadata'}->{'date_range'}->{'begin'};
+        $dateRangeEnd = (int)$xml->{'report_metadata'}->{'date_range'}->{'end'};
+
+        if ($dateRangeBegin === 0) {
+            $dateRangeBegin = (int)mktime(0, 0, 0, 1, 1, 2000);
+        }
+
+        if ($dateRangeEnd === 0) {
+            $dateRangeEnd = (int)mktime(0, 0, 0, 1, 1, 2000);
+        }
+
+        $minDate = (new Datetime())->setTimestamp($dateRangeBegin);
+        $maxDate = (new Datetime())->setTimestamp($dateRangeEnd);
         $org = (string)$xml->{'report_metadata'}->{'org_name'};
         $email = (string)$xml->{'report_metadata'}->{'email'};
         $extra = (string)$xml->{'report_metadata'}->{'extra_contact_info'};
@@ -101,17 +113,17 @@ class ReportMapper
         $identifierHeaderFrom = $xml->{'identifiers'}->{'header_from'};
 
         $dkimDomain = [];
-        $dkimResult = [];
+        $dkimResult = null;
         foreach ($xml->{'auth_results'}->{'dkim'} as $dkimXml) {
             $dkimDomain[] = (string)$dkimXml->{'domain'};
-            $dkimResult[] = (string)$dkimXml->{'result'};
+            $dkimResult ??= (string)$dkimXml->{'result'};
         }
 
         $spfDomain = [];
-        $spfResult = [];
+        $spfResult = null;
         foreach ($xml->{'auth_results'}->{'spf'} as $spfXml) {
             $spfDomain[] = (string)$spfXml->{'domain'};
-            $spfResult[] = (string)$spfXml->{'result'};
+            $spfResult ??= (string)$spfXml->{'result'};
         }
 
         $reason = [];
@@ -140,8 +152,8 @@ class ReportMapper
         }
 
         $disposition = $this->stringOrNull($disposition);
-        $dkimResult = $this->stringOrNull(implode('/', $dkimResult));
-        $spfResult = $this->stringOrNull(implode('/', $spfResult));
+        $dkimResult = $this->stringOrNull($dkimResult);
+        $spfResult = $this->stringOrNull($spfResult);
 
         $rptRecord->setIpv4($ipv4);
         $rptRecord->setIpv6($ipv6);

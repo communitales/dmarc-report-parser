@@ -13,6 +13,7 @@ use App\Domain\Config\ConfigFactory;
 use App\Domain\Config\Model\ImportConfig;
 use App\Domain\Report\Exception\AbstractReportException;
 use App\Domain\Report\Exception\ReportInvalidDataException;
+use App\Domain\Report\Exception\ReportSkipAttachmentException;
 use App\Domain\Report\Exception\ReportSkippedException;
 use App\Domain\Report\ReportMapper;
 use App\Entity\Report;
@@ -87,21 +88,13 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
 
         $messagesCount = $folder->messages()->all()->count();
         for ($messageNum = 1; $messageNum <= $messagesCount; $messageNum++) {
-            /** @phpstan-ignore argument.type */
-            $paginator = $folder->messages()->all()->paginate(1, $messageNum);
 
-            foreach ($paginator as $message) {
-                if ($messageNum === 20) {
-                    break 2;
-                }
-
+            $messages = $folder->messages()->all()->limit(1)->fetchOrderAsc()->get();
+            foreach ($messages as $message) {
                 try {
                     $this->processMessage($io, $config, $message, $messageNum, $messagesCount);
                 } catch (AbstractReportException $reportException) {
                     $io->comment($reportException->getMessage());
-                } catch (Throwable $throwable) {
-                    $io->error($throwable->getMessage());
-                    $this->logException($throwable);
                 }
             }
         }
@@ -113,13 +106,27 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
     private function processMessage(SymfonyStyle $io, ImportConfig $config, Message $message, int $messageNum, int $messageCount): void
     {
         $uid = $message->get('uid');
-        $io->writeln(sprintf('Processing message %d of %d: %s', $messageNum, $messageCount, $uid));
+        $io->writeln(
+            sprintf(
+                'Processing message %d of %d: Message ID %s - %s - %s',
+                $messageNum,
+                $messageCount,
+                $uid,
+                $message->getSubject(),
+                $message->getDate()->toDate()->format('d.m.Y H:i:s')
+            )
+        );
 
         $attachments = $message->getAttachments();
         foreach ($attachments as $attachment) {
-            $xmlString = $this->getXmlFromAttachment($attachment);
-
-            $this->createOrUpdateReport($xmlString);
+            try {
+                $xmlString = $this->getXmlFromAttachment($attachment);
+                $this->createOrUpdateReport($xmlString);
+            } catch (ReportSkippedException $reportException) {
+                $message->move($config->imapMoveFolder);
+                throw $reportException;
+            } catch (ReportSkipAttachmentException) {
+            }
         }
 
         $message->move($config->imapMoveFolder);
@@ -148,6 +155,7 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
 
     /**
      * @throws ReportInvalidDataException
+     * @throws ReportSkipAttachmentException
      * @throws MethodNotFoundException
      */
     private function getXmlFromAttachment(Attachment $attachment): string
@@ -170,7 +178,7 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
         } elseif ($mimeType === 'application/gzip') {
             $xml = $this->getXmlFromGzFile($filename);
         } else {
-            throw new ReportInvalidDataException('Unsupported mime type: '.$mimeType);
+            throw new ReportSkipAttachmentException('Unsupported mime type: '.$mimeType.$filename);
         }
 
         unlink($filename);

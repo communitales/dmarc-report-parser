@@ -151,4 +151,34 @@ class ReportMapperTest extends TestCase
 
         self::assertEquals($expected, $report);
     }
+
+    /**
+     * @throws ReportInvalidDataException
+     */
+    public function testCreateReportFromXmlInvalidMinDate(): void
+    {
+        $xmlString = (string)file_get_contents(__DIR__.'/../../../Fixtures/Report/report_invalid_mindate.xml');
+
+        $mapper = new ReportMapper();
+
+        $report = new Report();
+        $mapper->map($xmlString, $report);
+
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws ReportInvalidDataException
+     */
+    public function testCreateReportFromXmlMultipleSpf(): void
+    {
+        $xmlString = (string)file_get_contents(__DIR__.'/../../../Fixtures/Report/report_multiple_spf.xml');
+
+        $mapper = new ReportMapper();
+
+        $report = new Report();
+        $mapper->map($xmlString, $report);
+
+        $this->expectNotToPerformAssertions();
+    }
 }
