@@ -1,0 +1,96 @@
+{
+    "name": "communitales/report-parser",
+    "description": "A PHP based tool to parse DMARC reports from an IMAP mailbox or from the filesystem, and insert the information into a database. Based on techsneeze/dmarcts-report-parser",
+    "type": "project",
+    "license": "GPL-3.0-only",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/dbal": "^3.9.4",
+        "doctrine/doctrine-bundle": "^2.14",
+        "doctrine/doctrine-migrations-bundle": "^3.4.1",
+        "doctrine/orm": "^3.3.2",
+        "symfony/console": "7.2.*",
+        "symfony/dotenv": "7.2.*",
+        "symfony/flex": "^2.5",
+        "symfony/framework-bundle": "7.2.*",
+        "symfony/monolog-bundle": "^3.10",
+        "symfony/runtime": "7.2.*",
+        "symfony/yaml": "7.2.*",
+        "webklex/php-imap": "^6.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75.0",
+        "phpstan/phpstan": "^2.1.12",
+        "phpstan/phpstan-deprecation-rules": "^2.0.1",
+        "phpstan/phpstan-doctrine": "^2.0.2",
+        "phpstan/phpstan-phpunit": "^2.0.6",
+        "phpstan/phpstan-symfony": "^2.0.4",
+        "phpunit/phpunit": "^10.5.45",
+        "rector/rector": "^2.0.12",
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bump-after-update": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "phpcs": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.dev.neon > docs/TODO-phpstan.md",
+        "rector": "vendor/bin/rector process",
+        "test": "vendor/bin/phpunit",
+        "codecheck": [
+            "@rector",
+            "@phpcs",
+            "@phpstan",
+            "@test"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.2.*"
+        }
+    }
+}
