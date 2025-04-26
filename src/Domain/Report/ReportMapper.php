@@ -148,7 +148,7 @@ class ReportMapper
                 throw new ReportInvalidDataException('Invalid IP format after inet_pton:'.$ip);
             }
         } else {
-            throw new ReportInvalidDataException('Invalid IP address:'.$ip);
+            throw new ReportInvalidDataException(sprintf('Invalid IP address: "%s"', $ip));
         }
 
         $disposition = $this->stringOrNull($disposition);

@@ -125,7 +125,7 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
             } catch (ReportSkippedException $reportException) {
                 $message->move($config->imapMoveFolder);
                 throw $reportException;
-            } catch (ReportSkipAttachmentException) {
+            } catch (ReportSkipAttachmentException|ReportInvalidDataException) {
             }
         }
 

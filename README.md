@@ -5,8 +5,6 @@ database. Based on [techsneeze/dmarcts-report-parser](https://github.com/techsne
 
 The imported DMARC reports can be viewed
 with: [techsneeze/dmarcts-report-viewer](https://github.com/techsneeze/dmarcts-report-viewer)
-Because the project seems a bit inactive you can use our fork which also runs on PHP
-8.4: [communitales/dmarcts-report-viewer](https://github.com/communitales/dmarcts-report-viewer)
 
 
 ## Installation
