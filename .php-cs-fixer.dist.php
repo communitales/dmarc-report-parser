@@ -16,6 +16,7 @@ return (new PhpCsFixer\Config())
         'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
         'ordered_interfaces' => true,
         'protected_to_private' => true,
+        'single_quote' => true,
         'header_comment' => [
             'comment_type' => 'PHPDoc',
             'location' => 'after_declare_strict',

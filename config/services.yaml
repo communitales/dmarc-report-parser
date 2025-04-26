@@ -10,6 +10,9 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $imapReadFolder: '%env(IMAP_READ_FOLDER)%'
+            $imapMoveFolder: '%env(IMAP_MOVE_FOLDER)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -22,3 +25,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    ### All components
+    App\Component\:
+        resource: '../src/Component/*'
+        exclude:
+            - '../src/Component/**/Exception/*'
+            - '../src/Component/**/Model/*'
+
+    Webklex\PHPIMAP\ClientManager:
+        factory: ['App\Component\DependencyInjection\ImapClientManagerFactory', 'create']
+        arguments:
+            $host: '%env(string:IMAP_HOST)%'
+            $port: '%env(string:IMAP_PORT)%'
+            $username: '%env(string:IMAP_USER)%'
+            $password: '%env(string:IMAP_PASSWORD)%'
