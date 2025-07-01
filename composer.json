@@ -25,7 +25,7 @@
         "symfony/mime": "7.2.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.2.*",
-        "symfony/yaml": "7.2.*",
+        "symfony/yaml": "7.3.*",
         "webklex/php-imap": "^6.2"
     },
     "require-dev": {
