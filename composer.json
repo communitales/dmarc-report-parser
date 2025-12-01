@@ -23,7 +23,7 @@
         "symfony/flex": "^2.10",
         "symfony/framework-bundle": "7.3.*",
         "symfony/mime": "7.3.*",
-        "symfony/monolog-bundle": "^3.10",
+        "symfony/monolog-bundle": "^4.0",
         "symfony/runtime": "7.3.*",
         "symfony/yaml": "7.3.*",
         "webklex/php-imap": "^6.2"
