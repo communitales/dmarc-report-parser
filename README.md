@@ -10,7 +10,7 @@ with: [techsneeze/dmarcts-report-viewer](https://github.com/techsneeze/dmarcts-r
 ## Installation
 
 ```bash
-cp .env.local.dict .env.local
+cp .env.local.dist .env.local
 ```
 
 Adapt .env.local to your needs.

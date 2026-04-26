@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * @copyright Copyright (c) 2025 Communitales GmbH (https://www.communitales.com/)
+ * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,9 +21,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ReportRepository extends EntityRepository implements ServiceEntityRepositoryInterface
 {
-    /**
-     * @param EntityManagerInterface $manager
-     */
     public function __construct(EntityManagerInterface $manager)
     {
         parent::__construct($manager, $manager->getClassMetadata(Report::class));
