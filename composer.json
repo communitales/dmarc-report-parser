@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-pdo": "*",
@@ -15,17 +15,17 @@
         "ext-zlib": "*",
         "communitales/log": ">=3.2",
         "doctrine/dbal": ">=4.3.4",
-        "doctrine/doctrine-bundle": "^2.18.1",
-        "doctrine/doctrine-migrations-bundle": "^3.7.0",
+        "doctrine/doctrine-bundle": "^3",
+        "doctrine/doctrine-migrations-bundle": "^4.0.0",
         "doctrine/orm": "^3.5.7",
-        "symfony/console": "7.3.*",
-        "symfony/dotenv": "7.3.*",
+        "symfony/console": "8.0.*",
+        "symfony/dotenv": "8.0.*",
         "symfony/flex": "^2.10",
-        "symfony/framework-bundle": "7.3.*",
-        "symfony/mime": "7.3.*",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/runtime": "7.3.*",
-        "symfony/yaml": "7.3.*",
+        "symfony/framework-bundle": "8.0.*",
+        "symfony/mime": "8.0.*",
+        "symfony/monolog-bundle": "^4",
+        "symfony/runtime": "8.0.*",
+        "symfony/yaml": "8.0.*",
         "webklex/php-imap": "^6.2"
     },
     "require-dev": {
@@ -68,7 +68,7 @@
         "bump-after-update": true,
         "sort-packages": true,
         "platform": {
-            "php": "8.3.0"
+            "php": "8.4.1"
         }
     },
     "scripts": {
@@ -99,7 +99,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.3.*"
+            "require": "8.0.*"
         }
     }
 }
