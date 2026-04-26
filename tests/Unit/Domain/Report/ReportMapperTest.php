@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * @copyright Copyright (c) 2025 Communitales GmbH (https://www.communitales.com/)
+ * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,7 +28,7 @@ use function file_get_contents;
 /**
  * Class ReportMapperTest
  */
-class ReportMapperTest extends TestCase
+final class ReportMapperTest extends TestCase
 {
     /**
      * @throws ReportInvalidDataException
@@ -71,7 +73,7 @@ class ReportMapperTest extends TestCase
 
         $expected->addRptRecord($rptRecord);
 
-        self::assertEquals($expected, $report);
+        $this->assertEquals($expected, $report);
     }
 
     /**
@@ -149,7 +151,7 @@ class ReportMapperTest extends TestCase
 
         $expected->addRptRecord($rptRecord);
 
-        self::assertEquals($expected, $report);
+        $this->assertEquals($expected, $report);
     }
 
     /**

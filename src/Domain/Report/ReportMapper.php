@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Copyright (c) 2025 Communitales GmbH (https://www.communitales.com/)
+ * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -53,8 +53,8 @@ class ReportMapper
             $dateRangeEnd = (int)mktime(0, 0, 0, 1, 1, 2000);
         }
 
-        $minDate = (new Datetime())->setTimestamp($dateRangeBegin);
-        $maxDate = (new Datetime())->setTimestamp($dateRangeEnd);
+        $minDate = new Datetime()->setTimestamp($dateRangeBegin);
+        $maxDate = new Datetime()->setTimestamp($dateRangeEnd);
         $org = (string)$xml->{'report_metadata'}->{'org_name'};
         $email = (string)$xml->{'report_metadata'}->{'email'};
         $extra = (string)$xml->{'report_metadata'}->{'extra_contact_info'};
