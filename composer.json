@@ -81,13 +81,13 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "phpcs": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix",
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix",
         "phpstan": "vendor/bin/phpstan analyse > docs/TODO-phpstan.md",
         "rector": "vendor/bin/rector process",
         "test": "vendor/bin/phpunit",
         "codecheck": [
             "@rector",
-            "@phpcs",
+            "@php-cs-fixer",
             "@phpstan",
             "@test"
         ]
