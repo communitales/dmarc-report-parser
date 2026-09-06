@@ -39,3 +39,10 @@ services:
             $port: '%env(string:IMAP_PORT)%'
             $username: '%env(string:IMAP_USER)%'
             $password: '%env(string:IMAP_PASSWORD)%'
+
+    Communitales\Component\Log\ExceptionLogger:
+        arguments:
+            $logger: '@logger'
+
+    Communitales\Component\Log\ExceptionLoggerInterface:
+        alias: Communitales\Component\Log\ExceptionLogger

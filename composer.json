@@ -86,6 +86,7 @@
         "rector": "vendor/bin/rector process",
         "test": "vendor/bin/phpunit",
         "codecheck": [
+            "bin/console cache:warmup",
             "@rector",
             "@php-cs-fixer",
             "@phpstan",
