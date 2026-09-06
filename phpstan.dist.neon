@@ -8,6 +8,12 @@ parameters:
 
     paths:
         - src
+        - tests
+
+    excludePaths:
+        analyseAndScan:
+            - src/Kernel.php
+            - tests/bootstrap.php
 
     exceptions:
         uncheckedExceptionClasses:

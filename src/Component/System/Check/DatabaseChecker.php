@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/**
+/*
  * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,11 +11,10 @@ declare(strict_types=1);
 
 namespace App\Component\System\Check;
 
-use Communitales\Component\Log\LogAwareTrait;
+use Communitales\Component\Log\ExceptionLoggerInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use PDO;
-use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
@@ -27,12 +26,12 @@ use const PHP_EOL;
 /**
  * Class DatabaseChecker
  */
-class DatabaseChecker implements LoggerAwareInterface
+readonly class DatabaseChecker
 {
-    use LogAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ExceptionLoggerInterface $logger,
+    ) {
     }
 
     public function check(SymfonyStyle $io, bool $verbose): bool
@@ -91,7 +90,7 @@ class DatabaseChecker implements LoggerAwareInterface
                 return false;
             }
         } catch (Throwable $throwable) {
-            $this->logException($throwable);
+            $this->logger->logException($throwable);
             if ($verbose) {
                 $io->comment('Verbindung: ❌ Fehler');
             } else {

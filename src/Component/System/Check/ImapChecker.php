@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/**
+/*
  * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
@@ -11,8 +11,7 @@ declare(strict_types=1);
 
 namespace App\Component\System\Check;
 
-use Communitales\Component\Log\LogAwareTrait;
-use Psr\Log\LoggerAwareInterface;
+use Communitales\Component\Log\ExceptionLoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 use Webklex\PHPIMAP\Client;
@@ -24,12 +23,14 @@ use function sprintf;
 /**
  * Class ImapChecker
  */
-class ImapChecker implements LoggerAwareInterface
+readonly class ImapChecker
 {
-    use LogAwareTrait;
-
-    public function __construct(private readonly ClientManager $imapClient, private readonly string $imapReadFolder, private readonly string $imapMoveFolder)
-    {
+    public function __construct(
+        private ClientManager $imapClient,
+        private ExceptionLoggerInterface $logger,
+        private string $imapMoveFolder,
+        private string $imapReadFolder,
+    ) {
     }
 
     public function getName(): string
@@ -46,7 +47,7 @@ class ImapChecker implements LoggerAwareInterface
             $client->connect();
         } catch (Throwable $throwable) {
             $io->comment(sprintf('❌ Error while connecting: %s', $throwable->getMessage()));
-            $this->logException($throwable);
+            $this->logger->logException($throwable);
 
             return false;
         }
@@ -75,7 +76,7 @@ class ImapChecker implements LoggerAwareInterface
             }
         } catch (Throwable $throwable) {
             $io->comment(sprintf('❌ Error while connecting: %s', $throwable->getMessage()));
-            $this->logException($throwable);
+            $this->logger->logException($throwable);
 
             return false;
         }
