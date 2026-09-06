@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * @copyright Copyright (c) 2025 - 2026 Communitales GmbH (https://www.communitales.com/)
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,8 +18,7 @@ use App\Domain\Report\Exception\ReportSkippedException;
 use App\Domain\Report\ReportMapper;
 use App\Entity\Report;
 use App\Repository\ReportRepository;
-use Communitales\Component\Log\LogAwareTrait;
-use Psr\Log\LoggerAwareInterface;
+use Communitales\Component\Log\ExceptionLoggerInterface;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -39,13 +38,12 @@ use function gzopen;
 use function sprintf;
 
 #[AsCommand(name: 'import:imap', description: 'Import reports from IMAP.')]
-class ImportReportsFromImapCommand extends Command implements LoggerAwareInterface
+class ImportReportsFromImapCommand extends Command
 {
-    use LogAwareTrait;
-
     public function __construct(
-        private readonly ConfigFactory $configFactory,
         private readonly ClientManager $imapClient,
+        private readonly ConfigFactory $configFactory,
+        private readonly ExceptionLoggerInterface $logger,
         private readonly ReportMapper $reportMapper,
         private readonly ReportRepository $reportRepository,
     ) {
@@ -60,7 +58,7 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
         try {
             $this->import($io);
         } catch (Throwable $throwable) {
-            $this->logException($throwable);
+            $this->logger->logException($throwable);
             $io->error($throwable->getMessage());
 
             return Command::FAILURE;
@@ -113,8 +111,8 @@ class ImportReportsFromImapCommand extends Command implements LoggerAwareInterfa
                 $messageCount,
                 $uid,
                 $message->getSubject(),
-                $message->getDate()->toDate()->format('d.m.Y H:i:s')
-            )
+                $message->getDate()->toDate()->format('d.m.Y H:i:s'),
+            ),
         );
 
         $attachments = $message->getAttachments();
