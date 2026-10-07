@@ -154,7 +154,8 @@ class ReportMapper
 
         $disposition = $this->stringOrNull($disposition);
         $dkimResult = $this->stringOrNull($dkimResult);
-        $spfResult = strtolower($this->stringOrNull($spfResult));
+        $spfResult = $this->stringOrNull($spfResult);
+        $spfResult = $spfResult !== null ? strtolower($spfResult) : null;
 
         $rptRecord->setIpv4($ipv4);
         $rptRecord->setIpv6($ipv6);
