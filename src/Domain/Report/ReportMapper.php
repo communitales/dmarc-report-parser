@@ -23,6 +23,7 @@ use SimpleXMLElement;
 use function implode;
 use function mktime;
 use function simplexml_load_string;
+use function strtolower;
 use function unpack;
 
 /**
@@ -154,6 +155,7 @@ class ReportMapper
         $disposition = $this->stringOrNull($disposition);
         $dkimResult = $this->stringOrNull($dkimResult);
         $spfResult = $this->stringOrNull($spfResult);
+        $spfResult = $spfResult !== null ? strtolower($spfResult) : null;
 
         $rptRecord->setIpv4($ipv4);
         $rptRecord->setIpv6($ipv6);
